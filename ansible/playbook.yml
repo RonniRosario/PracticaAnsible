@@ -1,0 +1,40 @@
+
+---
+- name: Automatizacion de servidores Ubuntu
+  hosts: servidores
+  become: true
+
+  tasks:
+
+    - name: Actualizar cache de APT
+      apt:
+        update_cache: yes
+    - name: Crear usuario itla
+      user:
+        name: itla
+        state: present
+        create_home: yes
+
+    - name: Crear carpeta app
+      file:
+        path: /home/itla/app
+        state: directory
+        owner: itla
+        group: itla
+        mode: '0755'
+
+    - name: Crear archivo hola.txt
+      file:
+        path: /home/itla/app/hola.txt
+        state: touch
+        owner: itla
+        group: itla
+        mode: '0644'
+
+    - name: Instalar cowsay y htop
+      apt:
+        name:
+          - cowsay
+          - htop
+        state: present
+        update_cache: no
